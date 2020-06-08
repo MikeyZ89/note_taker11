@@ -8,9 +8,11 @@ let { uuid } = require("uuidv4");
 let app = express();
 let PORT = process.env.PORT || 3000;
 // Sets up the Express app to handle data parsing
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+
 // API ROUTES
 app.get("/api/notes", function (req, res) {
   fs.readFile(__dirname + "/db/db.json", (err, data) => {
@@ -19,6 +21,7 @@ app.get("/api/notes", function (req, res) {
     res.send(db);
   });
 });
+
 app.post("/api/notes", function (req, res) {
   let note = { ...req.body, id: uuid() };
   //save db.jason to variable
@@ -33,6 +36,7 @@ app.post("/api/notes", function (req, res) {
     });
   });
 });
+
 app.delete("/api/notes/:id", function (req, res) {
   fs.readFile("db/db.json", (err, data) => {
     let db = JSON.parse(data);
@@ -43,6 +47,7 @@ app.delete("/api/notes/:id", function (req, res) {
     });
   });
 });
+
 // HTML ROUTES:
 app.get("/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "./public/notes.html"));
@@ -50,6 +55,7 @@ app.get("/notes", function (req, res) {
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 });
+
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function () {
